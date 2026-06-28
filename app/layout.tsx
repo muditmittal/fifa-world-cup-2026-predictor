@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "IPL 2026 Playoff Simulator",
+  title: "FIFA World Cup 2026 — Bracket Predictor",
   description:
-    "Predict the winners of remaining IPL 2026 matches and watch the points table and top‑4 playoff picture update live.",
+    "Predict the FIFA World Cup 2026 knockout bracket. Pick winners, sync real results, and see how your predictions stack up.",
 };
 
 export default function RootLayout({
@@ -24,7 +24,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                var theme = localStorage.getItem('fifa2026-theme');
+                if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                  document.documentElement.classList.add('dark');
+                }
+              })();
+            `,
+          }}
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

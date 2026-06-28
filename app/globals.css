@@ -1,26 +1,178 @@
 @import "tailwindcss";
 
-:root {
-  --background: #0a0a0c;
-  --foreground: #ededed;
+@layer base {
+  :root {
+    --color-bg: #ffffff;
+    --color-surface: #f8f9fa;
+    --color-surface-hover: #f0f1f3;
+    --color-border: #e2e4e8;
+    --color-text: #1a1a2e;
+    --color-text-muted: #6b7280;
+    --color-accent: #6366f1;
+    --color-accent-hover: #4f46e5;
+    --color-correct: #16a34a;
+    --color-correct-bg: rgba(22, 163, 74, 0.08);
+    --color-incorrect: #dc2626;
+    --color-incorrect-bg: rgba(220, 38, 38, 0.08);
+    --color-reevaluate: #d97706;
+    --color-reevaluate-bg: rgba(217, 119, 6, 0.08);
+    --color-gold: #996515;
+    --color-gold-border: #b8860b;
+    --color-gold-bg: rgba(184, 134, 11, 0.08);
+    --color-silver: #71717a;
+    --color-silver-border: #a1a1aa;
+    --color-silver-bg: rgba(161, 161, 170, 0.08);
+  }
+
+  .dark {
+    --color-bg: #0a0a0f;
+    --color-surface: #13131a;
+    --color-surface-hover: #1a1a24;
+    --color-border: #2a2a3a;
+    --color-text: #e8e8f0;
+    --color-text-muted: #8888a0;
+    --color-accent: #6366f1;
+    --color-accent-hover: #818cf8;
+    --color-correct: #22c55e;
+    --color-correct-bg: rgba(34, 197, 94, 0.12);
+    --color-incorrect: #ef4444;
+    --color-incorrect-bg: rgba(239, 68, 68, 0.12);
+    --color-reevaluate: #f59e0b;
+    --color-reevaluate-bg: rgba(245, 158, 11, 0.12);
+    --color-gold: #d4a537;
+    --color-gold-border: #c9952c;
+    --color-gold-bg: rgba(201, 149, 44, 0.1);
+    --color-silver: #9ca3af;
+    --color-silver-border: #78818f;
+    --color-silver-bg: rgba(156, 163, 175, 0.1);
+  }
+
+  body {
+    background: var(--color-bg);
+    color: var(--color-text);
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+.match-card {
+  transition: all 0.2s ease;
 }
 
-html,
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+.match-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-body {
-  min-height: 100vh;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+.dark .match-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.team-btn {
+  transition: all 0.15s ease;
+  cursor: url("/trionda-cursor.png") 8 8, pointer;
+}
+
+.team-btn:active {
+  transform: scale(0.96);
+}
+
+.team-btn.selected {
+  animation: pick-pop 0.3s ease;
+}
+
+@keyframes pick-pop {
+  0% { transform: scale(0.94); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+.team-btn:hover {
+  background: var(--color-surface-hover);
+}
+
+.team-btn.selected {
+  background: rgba(99, 102, 241, 0.12);
+  border-color: var(--color-accent);
+}
+
+.team-btn.selected:hover {
+  background: rgba(99, 102, 241, 0.22);
+}
+
+.team-btn.correct:hover {
+  background: rgba(34, 197, 94, 0.18);
+}
+
+.team-btn.incorrect:hover {
+  background: rgba(239, 68, 68, 0.18);
+}
+
+.team-btn.correct {
+  background: var(--color-correct-bg);
+  border-color: var(--color-correct);
+}
+
+.team-btn.incorrect {
+  background: var(--color-incorrect-bg);
+  border-color: var(--color-incorrect);
+}
+
+.team-btn.reevaluate {
+  background: var(--color-reevaluate-bg);
+  border-color: var(--color-reevaluate);
+  animation: pulse-amber 2s ease-in-out infinite;
+}
+
+@keyframes pulse-amber {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.2); }
+  50% { box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.1); }
+}
+
+@keyframes gold-pulse {
+  0%, 100% { box-shadow: 0 0 12px var(--color-gold-bg), 0 0 4px var(--color-gold-bg); }
+  50% { box-shadow: 0 0 20px var(--color-gold-bg), 0 0 8px var(--color-gold-bg); }
+}
+
+.sync-btn {
+  transition: all 0.2s ease;
+}
+
+.sync-btn:hover {
+  transform: scale(1.02);
+}
+
+.sync-btn:active {
+  transform: scale(0.98);
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-in {
+  animation: fade-in 0.3s ease forwards;
+}
+
+.bracket-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.bracket-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+
+.bracket-scroll::-webkit-scrollbar-track {
+  background: var(--color-surface);
+  border-radius: 4px;
+}
+
+.bracket-scroll::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+
+.bracket-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
 }
