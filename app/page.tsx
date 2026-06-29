@@ -23,21 +23,26 @@ import { MatchSidebar } from "@/components/match-sidebar";
 import { ScoreModal } from "@/components/score-modal";
 import { AuthModal } from "@/components/auth-modal";
 import { calculateScore } from "@/lib/scoring";
+import { useIsMobile } from "@/lib/use-mobile";
 
 interface User {
   id: number;
   username: string;
   avatar?: string | null;
+  is_public?: boolean;
 }
 
 export default function Home() {
+  const isMobile = useIsMobile();
   const [state, setState] = useState<BracketState | null>(null);
   const [view, setView] = useState<"group" | "knockout">("knockout");
+  const [showMobileList, setShowMobileList] = useState(false);
   const [selectedMatchId, setSelectedMatchId] = useState<number | null>(null);
   const [panelPos, setPanelPos] = useState<{ top: number; left: number } | null>(null);
   const [showScoreModal, setShowScoreModal] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [viewingBracket, setViewingBracket] = useState<{ userId: number; username: string } | null>(null);
+  const [viewingState, setViewingState] = useState<BracketState | null>(null);
   const [didLogout, setDidLogout] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [authChecked, setAuthChecked] = useState(false);
@@ -100,12 +105,43 @@ export default function Home() {
     loadUserPredictions(u.id);
   };
 
+  const handleShare = async () => {
+    if (!user) return;
+    const confirmed = confirm("Share your predictions with everyone? Other players will be able to see your bracket on the leaderboard.");
+    if (!confirmed) return;
+
+    try {
+      await fetch("/api/share", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: user.id }),
+      });
+      setUser({ ...user, is_public: true });
+      localStorage.setItem("wc_user", JSON.stringify({ ...user, is_public: true }));
+      setShowLeaderboard(true);
+    } catch {}
+  };
+
   const handleLogout = async () => {
     localStorage.removeItem("wc_user");
     await fetch("/api/auth", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "logout" }) }).catch(() => {});
     setUser(null);
     setDidLogout(true);
   };
+
+  // Load another user's bracket for viewing
+  useEffect(() => {
+    if (!viewingBracket) {
+      setViewingState(null);
+      return;
+    }
+    fetch(`/api/predictions/${viewingBracket.userId}`)
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.bracketState) setViewingState(data.bracketState);
+      })
+      .catch(() => setViewingBracket(null));
+  }, [viewingBracket]);
 
   // Save to localStorage immediately, debounce DB save
   useEffect(() => {
@@ -253,26 +289,35 @@ export default function Home() {
       <header className="bg-[var(--color-bg)] shrink-0">
         <div className="max-w-[1600px] mx-auto px-4 py-4 flex items-center justify-between">
           {/* Left: score pill */}
-          <button className="flex items-center gap-2" onClick={() => setShowScoreModal(true)}>
-            <ProgressBar state={state} username={user?.username} />
+          <button className="flex items-center gap-2" onClick={() => !viewingBracket && setShowScoreModal(true)}>
+            <ProgressBar
+              state={viewingBracket && viewingState ? viewingState : state}
+              username={viewingBracket ? viewingBracket.username : user?.username}
+            />
           </button>
 
-          {/* Center: logo */}
-          <img src="/App Logo Black.png" alt="World Cup Predictor" className="h-16 logo-light" />
-          <img src="/App Logo White.png" alt="World Cup Predictor" className="h-16 logo-dark" />
+          {/* Center: logo (hidden on mobile) */}
+          <img src="/App Logo Black.png" alt="World Cup Predictor" className="h-16 logo-light hidden sm:block" />
+          <img src="/App Logo White.png" alt="World Cup Predictor" className="h-16 logo-dark hidden sm:block" />
 
-          {/* Right: leaderboard + toggle */}
+          {/* Right: share/leaderboard + toggle */}
           <div className="flex items-center gap-3">
-          <button
-            onClick={() => setShowLeaderboard(true)}
-            className="p-1.5 hover:bg-[var(--color-surface-hover)] rounded transition-colors"
-            title="Leaderboard"
-          >
-            <svg className="w-5 h-5 text-[var(--color-text-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 3h5v5M8 3H3v5M16 21h5v-5M8 21H3v-5M12 8v8M8 12h8" />
-            </svg>
-          </button>
-          <div className="flex items-center gap-1 bg-[var(--color-surface)] rounded-lg p-0.5">
+          {user?.is_public ? (
+            <button
+              onClick={() => setShowLeaderboard(true)}
+              className="px-2.5 py-1 text-xs font-medium border border-[var(--color-border)] rounded hover:bg-[var(--color-surface-hover)] transition-colors"
+            >
+              Leaderboard
+            </button>
+          ) : (
+            <button
+              onClick={handleShare}
+              className="px-2.5 py-1 text-xs font-medium bg-[var(--color-accent)] text-white rounded hover:opacity-90 transition-opacity"
+            >
+              Share
+            </button>
+          )}
+          <div className="hidden sm:flex items-center gap-1 bg-[var(--color-surface)] rounded-lg p-0.5">
             <button
               onClick={() => setView("group")}
               className={`px-3 py-1.5 text-xs rounded-md transition-colors ${
@@ -299,12 +344,60 @@ export default function Home() {
       </header>
 
       {/* Main content */}
-      <main className="flex-1 max-w-[1600px] mx-auto w-full px-4 overflow-hidden">
+      <main className="flex-1 max-w-[1600px] mx-auto w-full px-4 overflow-hidden flex flex-col">
+        {/* Viewing banner */}
+        {viewingBracket && (
+          <div className="flex items-center justify-between px-4 py-2 mb-1 bg-[var(--color-surface)] rounded-lg border border-[var(--color-border)] shrink-0">
+            <span className="text-xs text-[var(--color-text-muted)]">
+              Viewing <span className="font-bold text-[var(--color-text)]">{viewingBracket.username}</span>&apos;s bracket
+            </span>
+            <button
+              onClick={() => setViewingBracket(null)}
+              className="text-xs font-medium text-[var(--color-accent)] hover:underline"
+            >
+              Back to mine
+            </button>
+          </div>
+        )}
 
-        {view === "knockout" ? (
-          <BracketView state={state} onPick={handlePick} onCardClick={(id, pos) => { setSelectedMatchId(id); setPanelPos(pos || null); }} onScoreChange={(id, a, b) => handleScorePredict(id, a, b)} />
+        {/* Mobile: show list view by default */}
+        {isMobile && !showMobileList ? (
+          <div className="flex-1 overflow-y-auto">
+            <ScoreModal
+              summary={calculateScore(viewingBracket && viewingState ? viewingState : state)}
+              state={viewingBracket && viewingState ? viewingState : state}
+              onClose={() => {}}
+              onSync={handleSync}
+              onPickWinner={viewingBracket ? () => {} : handlePick}
+              onScorePredict={viewingBracket ? () => {} : handleScorePredict}
+              username={viewingBracket ? viewingBracket.username : user?.username}
+              avatar={user?.avatar}
+              onLogout={handleLogout}
+              embedded
+            />
+          </div>
+        ) : view === "knockout" ? (
+          <div className="flex-1 overflow-auto">
+            {viewingBracket && viewingState ? (
+              <BracketView state={viewingState} onPick={() => {}} onCardClick={() => {}} onScoreChange={() => {}} />
+            ) : (
+              <BracketView state={state} onPick={handlePick} onCardClick={(id, pos) => { setSelectedMatchId(id); setPanelPos(pos || null); }} onScoreChange={(id, a, b) => handleScorePredict(id, a, b)} />
+            )}
+          </div>
         ) : (
           <GroupStageView />
+        )}
+
+        {/* Mobile: toggle to bracket view */}
+        {isMobile && (
+          <div className="shrink-0 py-2 flex justify-center">
+            <button
+              onClick={() => setShowMobileList(!showMobileList)}
+              className="px-3 py-1.5 text-xs font-medium border border-[var(--color-border)] rounded-lg hover:bg-[var(--color-surface-hover)] transition-colors"
+            >
+              {showMobileList ? "← Back to List" : "Open Bracket →"}
+            </button>
+          </div>
         )}
       </main>
 

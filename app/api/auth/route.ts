@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
   try {
     const { id } = JSON.parse(sessionCookie);
     const sql = getDb();
-    const result = await sql`SELECT id, username, avatar FROM users WHERE id = ${id}`;
+    const result = await sql`SELECT id, username, avatar, is_public FROM users WHERE id = ${id}`;
     if (result.length === 0) {
       return NextResponse.json({ user: null });
     }
@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
     }
 
     const result = await sql`
-      SELECT id, username, avatar FROM users WHERE username = ${username.toLowerCase().trim()} AND pin = ${pin}
+      SELECT id, username, avatar, is_public FROM users WHERE username = ${username.toLowerCase().trim()} AND pin = ${pin}
     `;
 
     if (result.length === 0) {

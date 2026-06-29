@@ -10,6 +10,7 @@ export async function GET() {
     SELECT u.id, u.username, u.avatar, p.bracket_state
     FROM users u
     LEFT JOIN predictions p ON p.user_id = u.id
+    WHERE u.is_public = true
     ORDER BY u.created_at
   `;
 

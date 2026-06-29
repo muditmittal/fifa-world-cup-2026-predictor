@@ -37,15 +37,16 @@ interface ScoreModalProps {
   username?: string;
   avatar?: string | null;
   onLogout?: () => void;
+  embedded?: boolean;
 }
 
-export function ScoreModal({ summary, state, onClose, onSync, onPickWinner, onScorePredict, username, avatar, onLogout }: ScoreModalProps) {
+export function ScoreModal({ summary, state, onClose, onSync, onPickWinner, onScorePredict, username, avatar, onLogout, embedded }: ScoreModalProps) {
   const [showTooltip, setShowTooltip] = useState(false);
 
   return (
-    <div className="fixed inset-0 z-[99999] flex items-center justify-center">
-      <div className="absolute inset-0 bg-black/40" onClick={onClose} />
-      <div className="relative bg-[var(--color-bg)] border border-[var(--color-border)] rounded-xl shadow-2xl w-[540px] max-h-[80vh] flex flex-col overflow-hidden">
+    <div className={embedded ? "flex flex-col h-full" : "fixed inset-0 z-[99999] flex items-center justify-center"}>
+      {!embedded && <div className="absolute inset-0 bg-black/40" onClick={onClose} />}
+      <div className={embedded ? "flex flex-col flex-1 overflow-hidden" : "relative bg-[var(--color-bg)] border border-[var(--color-border)] rounded-xl shadow-2xl w-[540px] max-h-[80vh] flex flex-col overflow-hidden"}>
       {/* Header: avatar + username + actions */}
       <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--color-border)]">
         <div className="flex items-center gap-3">
@@ -118,11 +119,13 @@ export function ScoreModal({ summary, state, onClose, onSync, onPickWinner, onSc
               </div>
             )}
           </div>
-          <button onClick={onClose} className="p-1.5 hover:bg-[var(--color-surface-hover)] rounded">
-            <svg className="w-5 h-5 text-[var(--color-text-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
+          {!embedded && (
+            <button onClick={onClose} className="p-1.5 hover:bg-[var(--color-surface-hover)] rounded">
+              <svg className="w-5 h-5 text-[var(--color-text-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          )}
         </div>
       </div>
 

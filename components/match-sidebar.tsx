@@ -120,11 +120,16 @@ export function MatchSidebar({ matchId, state, onClose, onPickWinner, onScorePre
     onScorePredict(matchId, -1, -1); // Signal to clear
   };
 
+  const isMobileView = typeof window !== "undefined" && window.innerWidth < 768;
+
   return (
     <div
       ref={panelRef}
-      className="fixed w-[340px] bg-[var(--color-bg)] border border-[var(--color-border)] rounded-lg shadow-2xl z-[9998] flex flex-col overflow-hidden"
-      style={(() => {
+      className={isMobileView
+        ? "fixed inset-0 bg-[var(--color-bg)] z-[9998] flex flex-col overflow-hidden"
+        : "fixed w-[340px] bg-[var(--color-bg)] border border-[var(--color-border)] rounded-lg shadow-2xl z-[9998] flex flex-col overflow-hidden"
+      }
+      style={isMobileView ? undefined : (() => {
         const desiredTop = position ? Math.max(20, position.top - 60) : 20;
         const topClamped = Math.min(desiredTop, window.innerHeight - 300);
         const finalTop = Math.max(20, topClamped);
