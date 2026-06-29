@@ -7,6 +7,26 @@ import { CountryFlag } from "./country-flag";
 import { bracket, roundLabels } from "@/lib/tournament-data";
 import { flagColors, teamPrimaryColor } from "@/lib/all-teams";
 
+const PLAYER_WIKI: Record<string, string> = {
+  messi: "Lionel_Messi", mbappe: "Kylian_Mbappé", haaland: "Erling_Haaland",
+  vinicius: "Vinícius_Júnior", bellingham: "Jude_Bellingham", salah: "Mohamed_Salah",
+  debruyne: "Kevin_De_Bruyne", rodri: "Rodri_(footballer,_born_1996)", saka: "Bukayo_Saka",
+  yamal: "Lamine_Yamal", palmer: "Cole_Palmer", wirtz: "Florian_Wirtz",
+  pedri: "Pedri", osimhen: "Victor_Osimhen", hakimi: "Achraf_Hakimi",
+  martinez: "Emiliano_Martínez", james: "James_Rodríguez", pulisic: "Christian_Pulisic",
+  davies: "Alphonso_Davies", ronaldo: "Cristiano_Ronaldo", neymar: "Neymar",
+  modric: "Luka_Modrić", gakpo: "Cody_Gakpo", raphinha: "Raphinha",
+  kane: "Harry_Kane", lewandowski: "Robert_Lewandowski",
+  diaz: "Luis_Díaz_(Colombian_footballer)", alvarez: "Julián_Álvarez",
+  muller: "Thomas_Müller", son: "Son_Heung-min",
+};
+
+function getPlayerAvatarUrl(playerId: string): string {
+  const wiki = PLAYER_WIKI[playerId];
+  if (wiki) return `/api/avatar?wiki=${encodeURIComponent(wiki)}`;
+  return `https://ui-avatars.com/api/?name=${playerId}&size=40&background=eee&color=555&bold=true&format=svg`;
+}
+
 interface ScoreModalProps {
   summary: ScoreSummary;
   state: BracketState;
@@ -35,9 +55,10 @@ export function ScoreModal({ summary, state, onClose, onSync, onPickWinner, onSc
               <CountryFlag code={avatar.replace("flag:", "")} />
             ) : avatar?.startsWith("player:") ? (
               <img
-                src={`https://ui-avatars.com/api/?name=${avatar.replace("player:", "")}&size=40&background=random&bold=true&format=svg`}
+                src={getPlayerAvatarUrl(avatar.replace("player:", ""))}
                 alt=""
                 className="w-full h-full object-cover"
+                onError={(e) => { (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${avatar.replace("player:", "")}&size=40&background=eee&color=555&bold=true&format=svg`; }}
               />
             ) : (
               <span className="text-sm font-bold text-[var(--color-text-muted)]">{username?.charAt(0).toUpperCase()}</span>

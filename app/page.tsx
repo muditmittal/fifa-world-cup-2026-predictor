@@ -38,6 +38,7 @@ export default function Home() {
   const [showScoreModal, setShowScoreModal] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [viewingBracket, setViewingBracket] = useState<{ userId: number; username: string } | null>(null);
+  const [didLogout, setDidLogout] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [authChecked, setAuthChecked] = useState(false);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -103,6 +104,7 @@ export default function Home() {
     localStorage.removeItem("wc_user");
     await fetch("/api/auth", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "logout" }) }).catch(() => {});
     setUser(null);
+    setDidLogout(true);
   };
 
   // Save to localStorage immediately, debounce DB save
@@ -245,7 +247,7 @@ export default function Home() {
   return (
     <CrowdProvider>
     <>
-    {!user && <AuthModal onAuth={handleAuth} />}
+    {!user && <AuthModal onAuth={handleAuth} defaultMode={didLogout ? "login" : "signup"} />}
     <div className="h-screen flex flex-col overflow-hidden">
       {/* Header — single row: toggle | logo | progress */}
       <header className="bg-[var(--color-bg)] shrink-0">
