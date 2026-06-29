@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-export function ThemeToggle() {
+export function ThemeToggle({ showLabel }: { showLabel?: boolean }) {
   const [dark, setDark] = useState(true);
 
   useEffect(() => {
@@ -19,7 +19,7 @@ export function ThemeToggle() {
   return (
     <button
       onClick={toggle}
-      className="p-1.5 rounded-md hover:bg-[var(--color-surface-hover)] transition-colors text-[var(--color-text-muted)] hover:text-[var(--color-text)]"
+      className="flex items-center gap-1.5 p-1.5 rounded-md hover:bg-[var(--color-surface-hover)] transition-colors text-[var(--color-text-muted)] hover:text-[var(--color-text)]"
       aria-label="Toggle theme"
     >
       {dark ? (
@@ -30,6 +30,9 @@ export function ThemeToggle() {
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
         </svg>
+      )}
+      {showLabel && (
+        <span className="text-xs">{dark ? "Light mode" : "Dark mode"}</span>
       )}
     </button>
   );

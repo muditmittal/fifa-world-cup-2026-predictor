@@ -248,14 +248,14 @@ export const bracket: MatchFixture[] = [
   { id: 100, round: "QF", date: "Jul 11", venue: "Houston", teamACode: null, teamBCode: null, nextMatchId: 102, nextSlot: "B", bracketSide: "right" },
 
   // Semi-finals
-  { id: 101, round: "SF", date: "Jul 14", venue: "New York", teamACode: null, teamBCode: null, nextMatchId: 103, nextSlot: "A", bracketSide: "left" },
-  { id: 102, round: "SF", date: "Jul 15", venue: "Dallas", teamACode: null, teamBCode: null, nextMatchId: 103, nextSlot: "B", bracketSide: "right" },
-
-  // Final
-  { id: 103, round: "F", date: "Jul 19", venue: "New York", teamACode: null, teamBCode: null, nextMatchId: null, nextSlot: null, bracketSide: "left" },
+  { id: 101, round: "SF", date: "Jul 14", venue: "New York", teamACode: null, teamBCode: null, nextMatchId: 104, nextSlot: "A", bracketSide: "left" },
+  { id: 102, round: "SF", date: "Jul 15", venue: "Dallas", teamACode: null, teamBCode: null, nextMatchId: 104, nextSlot: "B", bracketSide: "right" },
 
   // Third-place playoff
-  { id: 104, round: "3RD", date: "Jul 18", venue: "Miami", teamACode: null, teamBCode: null, nextMatchId: null, nextSlot: null, bracketSide: "left" },
+  { id: 103, round: "3RD", date: "Jul 18", venue: "Miami", teamACode: null, teamBCode: null, nextMatchId: null, nextSlot: null, bracketSide: "left" },
+
+  // Final
+  { id: 104, round: "F", date: "Jul 19", venue: "New York", teamACode: null, teamBCode: null, nextMatchId: null, nextSlot: null, bracketSide: "left" },
 ];
 
 export const roundLabels: Record<string, string> = {

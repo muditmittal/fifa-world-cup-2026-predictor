@@ -168,6 +168,7 @@ export function clearPrediction(
   newState.matches[matchId] = {
     ...newState.matches[matchId],
     predictedWinner: null,
+    predictedScore: null,
   };
 
   if (oldWinner) {

@@ -6,10 +6,11 @@
     --color-surface: #f8f9fa;
     --color-surface-hover: #f0f1f3;
     --color-border: #e2e4e8;
+    --color-border-light: #f0f1f3;
     --color-text: #1a1a2e;
     --color-text-muted: #6b7280;
-    --color-accent: #6366f1;
-    --color-accent-hover: #4f46e5;
+    --color-accent: #000000;
+    --color-accent-hover: #1a1a2e;
     --color-correct: #16a34a;
     --color-correct-bg: rgba(22, 163, 74, 0.08);
     --color-incorrect: #dc2626;
@@ -22,29 +23,36 @@
     --color-silver: #71717a;
     --color-silver-border: #a1a1aa;
     --color-silver-bg: rgba(161, 161, 170, 0.08);
+    --border-color-opacity: 4D;
+    --connector-colored-opacity: 0.3;
+    --connector-neutral-opacity: 0.2;
   }
 
   .dark {
     --color-bg: #0a0a0f;
     --color-surface: #13131a;
     --color-surface-hover: #1a1a24;
-    --color-border: #2a2a3a;
+    --color-border: #3a3a4f;
+    --color-border-light: #2a2a3a;
     --color-text: #e8e8f0;
-    --color-text-muted: #8888a0;
-    --color-accent: #6366f1;
-    --color-accent-hover: #818cf8;
-    --color-correct: #22c55e;
-    --color-correct-bg: rgba(34, 197, 94, 0.12);
-    --color-incorrect: #ef4444;
-    --color-incorrect-bg: rgba(239, 68, 68, 0.12);
-    --color-reevaluate: #f59e0b;
-    --color-reevaluate-bg: rgba(245, 158, 11, 0.12);
-    --color-gold: #d4a537;
-    --color-gold-border: #c9952c;
-    --color-gold-bg: rgba(201, 149, 44, 0.1);
-    --color-silver: #9ca3af;
-    --color-silver-border: #78818f;
-    --color-silver-bg: rgba(156, 163, 175, 0.1);
+    --color-text-muted: #9999b0;
+    --color-accent: #e8e8f0;
+    --color-accent-hover: #f0f0f8;
+    --color-correct: #34d399;
+    --color-correct-bg: rgba(52, 211, 153, 0.15);
+    --color-incorrect: #f87171;
+    --color-incorrect-bg: rgba(248, 113, 113, 0.15);
+    --color-reevaluate: #fbbf24;
+    --color-reevaluate-bg: rgba(251, 191, 36, 0.15);
+    --color-gold: #fbbf24;
+    --color-gold-border: #f59e0b;
+    --color-gold-bg: rgba(245, 158, 11, 0.15);
+    --color-silver: #d1d5db;
+    --color-silver-border: #9ca3af;
+    --color-silver-bg: rgba(209, 213, 219, 0.12);
+    --border-color-opacity: 80;
+    --connector-colored-opacity: 0.6;
+    --connector-neutral-opacity: 0.3;
   }
 
   body {
@@ -53,6 +61,10 @@
     transition: background-color 0.2s ease, color 0.2s ease;
   }
 }
+
+.logo-dark { display: none; }
+.dark .logo-light { display: none; }
+.dark .logo-dark { display: block; }
 
 .match-card {
   transition: all 0.2s ease;
@@ -91,12 +103,11 @@
 }
 
 .team-btn.selected {
-  background: rgba(99, 102, 241, 0.12);
-  border-color: var(--color-accent);
+  border-left-width: 2px;
 }
 
 .team-btn.selected:hover {
-  background: rgba(99, 102, 241, 0.22);
+  filter: brightness(0.97);
 }
 
 .team-btn.correct:hover {

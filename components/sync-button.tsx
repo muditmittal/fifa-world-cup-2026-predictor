@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 interface SyncButtonProps {
-  onSync: () => void;
+  onSync: () => void | Promise<void>;
   lastSynced: string | null;
 }
 
@@ -12,9 +12,11 @@ export function SyncButton({ onSync, lastSynced }: SyncButtonProps) {
 
   const handleSync = async () => {
     setSyncing(true);
-    await new Promise((r) => setTimeout(r, 600));
-    onSync();
-    setSyncing(false);
+    try {
+      await onSync();
+    } finally {
+      setSyncing(false);
+    }
   };
 
   return (
@@ -37,7 +39,7 @@ export function SyncButton({ onSync, lastSynced }: SyncButtonProps) {
             d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
           />
         </svg>
-        {syncing ? "Syncing..." : "Sync"}
+        {syncing ? "Updating..." : "Update"}
       </button>
       {lastSynced && (
         <span className="text-[9px] text-[var(--color-text-muted)] opacity-70">

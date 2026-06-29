@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Barlow, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const barlow = Barlow({
+  variable: "--font-barlow",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
 });
 
 const geistMono = Geist_Mono({
@@ -13,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "FIFA World Cup 2026 — Bracket Predictor",
+  title: "2026 FIFA World Cup Predictor",
   description:
     "Predict the FIFA World Cup 2026 knockout bracket. Pick winners, sync real results, and see how your predictions stack up.",
 };
@@ -26,6 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async />
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -40,7 +42,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${barlow.variable} ${geistMono.variable} antialiased font-[family-name:var(--font-barlow)] font-medium`}
       >
         {children}
       </body>
