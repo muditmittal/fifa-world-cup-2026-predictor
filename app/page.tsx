@@ -214,7 +214,6 @@ export default function Home() {
         });
       }
     } catch {
-      // Fallback to static results
       setState((prev) => {
         if (!prev) return prev;
         if (actualResults.length === 0) return prev;
@@ -222,6 +221,12 @@ export default function Home() {
       });
     }
   }, []);
+
+  // Auto-sync results on page load
+  useEffect(() => {
+    if (!state || !authChecked) return;
+    handleSync();
+  }, [authChecked]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleReset = useCallback(() => {
     if (confirm("Reset all predictions? This cannot be undone.")) {
@@ -431,7 +436,6 @@ export default function Home() {
             <span className="text-xs text-[var(--color-text-muted)]">
               Sources: FIFA.com · Sporting News · Wikipedia
             </span>
-            <SyncButton onSync={handleSync} lastSynced={state.lastSynced} />
           </div>
           <button
             onClick={handleReset}
