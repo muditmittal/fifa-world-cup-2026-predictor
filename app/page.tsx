@@ -18,6 +18,7 @@ import { ProgressBar } from "@/components/progress-bar";
 import { SyncButton } from "@/components/sync-button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { LeaderboardModal } from "@/components/leaderboard-modal";
+import { ShareModal } from "@/components/share-modal";
 import { CrowdProvider } from "@/lib/crowd-context";
 import { MatchSidebar } from "@/components/match-sidebar";
 import { ScoreModal } from "@/components/score-modal";
@@ -105,19 +106,25 @@ export default function Home() {
     loadUserPredictions(u.id);
   };
 
-  const handleShare = async () => {
-    if (!user) return;
-    const confirmed = confirm("Share your predictions with everyone? Other players will be able to see your bracket on the leaderboard.");
-    if (!confirmed) return;
+  const [showShareModal, setShowShareModal] = useState(false);
 
+  const handleShare = () => {
+    if (!user) return;
+    setShowShareModal(true);
+  };
+
+  const confirmShare = async (newUsername: string, newAvatar: string | null) => {
+    if (!user) return;
     try {
       await fetch("/api/share", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId: user.id }),
+        body: JSON.stringify({ userId: user.id, username: newUsername, avatar: newAvatar }),
       });
-      setUser({ ...user, is_public: true });
-      localStorage.setItem("wc_user", JSON.stringify({ ...user, is_public: true }));
+      const updatedUser = { ...user, username: newUsername, avatar: newAvatar, is_public: true };
+      setUser(updatedUser);
+      localStorage.setItem("wc_user", JSON.stringify(updatedUser));
+      setShowShareModal(false);
       setShowLeaderboard(true);
     } catch {}
   };
@@ -474,6 +481,16 @@ export default function Home() {
             setShowLeaderboard(false);
             setViewingBracket({ userId, username });
           }}
+        />
+      )}
+
+      {/* Share modal */}
+      {showShareModal && user && (
+        <ShareModal
+          username={user.username}
+          avatar={user.avatar || null}
+          onConfirm={confirmShare}
+          onClose={() => setShowShareModal(false)}
         />
       )}
     </div>

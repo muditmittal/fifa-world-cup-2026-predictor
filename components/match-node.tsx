@@ -30,11 +30,11 @@ function roundLabel(round: string): string {
 }
 
 const sizeConfig = {
-  sm:    { width: "w-[120px]", flag: "text-[16px]", name: "text-[12px]", row: "h-[28px] pl-[10px] pr-[8px] py-1", header: "text-[10px]", score: "text-[13px] font-[family-name:var(--font-geist-mono)]" },
-  md:    { width: "w-[160px]", flag: "text-[18px]", name: "text-[13px]", row: "h-[30px] pl-[10px] pr-[8px] py-1", header: "text-[10px]", score: "text-[14px] font-[family-name:var(--font-geist-mono)]" },
-  lg:    { width: "w-[172px]", flag: "text-[20px]", name: "text-[14px]", row: "h-[32px] pl-[12px] pr-[10px] py-1.5", header: "text-[11px]", score: "text-[15px] font-[family-name:var(--font-geist-mono)]" },
-  xl:    { width: "w-[172px]", flag: "text-[20px]", name: "text-[14px]", row: "h-[32px] pl-[12px] pr-[10px] py-1.5", header: "text-[11px]", score: "text-[15px] font-[family-name:var(--font-geist-mono)]" },
-  final: { width: "w-[172px]", flag: "text-[20px]", name: "text-[14px] font-semibold", row: "h-[32px] pl-[12px] pr-[10px] py-1.5", header: "text-[11px]", score: "text-[15px] font-[family-name:var(--font-geist-mono)] font-bold" },
+  sm:    { width: "w-[clamp(105px,8vw,120px)]", flag: "text-[16px]", name: "text-[12px]", row: "h-[28px] pl-[10px] pr-[8px] py-1", header: "text-[10px]", score: "text-[13px] font-[family-name:var(--font-geist-mono)]" },
+  md:    { width: "w-[clamp(140px,11vw,160px)]", flag: "text-[18px]", name: "text-[13px]", row: "h-[30px] pl-[10px] pr-[8px] py-1", header: "text-[10px]", score: "text-[14px] font-[family-name:var(--font-geist-mono)]" },
+  lg:    { width: "w-[clamp(150px,12vw,172px)]", flag: "text-[20px]", name: "text-[14px]", row: "h-[32px] pl-[12px] pr-[10px] py-1.5", header: "text-[11px]", score: "text-[15px] font-[family-name:var(--font-geist-mono)]" },
+  xl:    { width: "w-[clamp(150px,12vw,172px)]", flag: "text-[20px]", name: "text-[14px]", row: "h-[32px] pl-[12px] pr-[10px] py-1.5", header: "text-[11px]", score: "text-[15px] font-[family-name:var(--font-geist-mono)]" },
+  final: { width: "w-[clamp(150px,12vw,172px)]", flag: "text-[20px]", name: "text-[14px] font-semibold", row: "h-[32px] pl-[12px] pr-[10px] py-1.5", header: "text-[11px]", score: "text-[15px] font-[family-name:var(--font-geist-mono)] font-bold" },
 };
 
 interface MatchNodeProps {
