@@ -159,7 +159,8 @@ export function BracketView({ state, onPick, onCardClick, onScoreChange }: Brack
 
   return (
     <div className="h-full flex flex-col">
-      <div className="w-full relative flex-1 overflow-auto" ref={containerRef}>
+      <div className="w-full flex-1 overflow-auto">
+        <div className="relative min-w-max min-h-full flex items-center justify-center" ref={containerRef}>
         {/* SVG overlay for connector lines */}
         <svg className="absolute inset-0 w-full h-full pointer-events-none z-0" style={{ overflow: "visible" }}>
           {lines.map((line, i) => {
@@ -183,28 +184,28 @@ export function BracketView({ state, onPick, onCardClick, onScoreChange }: Brack
         {/* Bracket body */}
         <div className="flex items-stretch relative z-10" style={{ minHeight: 640 }}>
           {/* Left R32 */}
-          <div className="flex flex-col justify-around shrink-0 gap-[clamp(6px,1.2vh,16px)] py-[clamp(4px,0.8vh,12px)]">
+          <div className="flex flex-col justify-around shrink-0 gap-[clamp(8px,1.5vh,20px)] py-[clamp(6px,1vh,16px)]">
             {leftR32.map((m) => renderMatch(m, "sm"))}
           </div>
 
           {/* Spacer — flex 2 (ratio 80) */}
-          <div className="flex-[2] min-w-4" />
+          <div className="flex-[2] min-w-[clamp(16px,3vw,48px)]" />
 
           {/* Left R16 */}
-          <div className="flex flex-col justify-around shrink-0 gap-[clamp(6px,1.2vh,16px)] py-[clamp(4px,0.8vh,12px)]">
+          <div className="flex flex-col justify-around shrink-0 gap-[clamp(8px,1.5vh,20px)] py-[clamp(6px,1vh,16px)]">
             {leftR16.map((m) => renderMatch(m, "sm"))}
           </div>
 
           {/* Spacer — flex 2 (ratio 80) */}
-          <div className="flex-[2] min-w-4" />
+          <div className="flex-[2] min-w-[clamp(16px,3vw,48px)]" />
 
           {/* Left QF */}
-          <div className="flex flex-col justify-around shrink-0 gap-[clamp(6px,1.2vh,16px)] py-[clamp(4px,0.8vh,12px)]">
+          <div className="flex flex-col justify-around shrink-0 gap-[clamp(8px,1.5vh,20px)] py-[clamp(6px,1vh,16px)]">
             {leftQF.map((m, i) => renderMatch(m, "md", false, false, `QF${i + 1}`))}
           </div>
 
           {/* Spacer — flex 3 (ratio 120, extended for finals) */}
-          <div className="flex-[3] min-w-6" />
+          <div className="flex-[3] min-w-[clamp(24px,4vw,64px)]" />
 
           {/* CENTER: SF + Final + 3rd */}
           <div className="flex flex-col items-center justify-center py-2">
@@ -239,28 +240,29 @@ export function BracketView({ state, onPick, onCardClick, onScoreChange }: Brack
           </div>
 
           {/* Spacer — flex 3 (ratio 120, extended for finals) */}
-          <div className="flex-[3] min-w-6" />
+          <div className="flex-[3] min-w-[clamp(24px,4vw,64px)]" />
 
           {/* Right QF */}
-          <div className="flex flex-col justify-around shrink-0 gap-[clamp(6px,1.2vh,16px)] py-[clamp(4px,0.8vh,12px)]">
+          <div className="flex flex-col justify-around shrink-0 gap-[clamp(8px,1.5vh,20px)] py-[clamp(6px,1vh,16px)]">
             {rightQF.map((m, i) => renderMatch(m, "md", false, false, `QF${i + 1 + leftQF.length}`))}
           </div>
 
           {/* Spacer — flex 2 (ratio 80) */}
-          <div className="flex-[2] min-w-4" />
+          <div className="flex-[2] min-w-[clamp(16px,3vw,48px)]" />
 
           {/* Right R16 */}
-          <div className="flex flex-col justify-around shrink-0 gap-[clamp(6px,1.2vh,16px)] py-[clamp(4px,0.8vh,12px)]">
+          <div className="flex flex-col justify-around shrink-0 gap-[clamp(8px,1.5vh,20px)] py-[clamp(6px,1vh,16px)]">
             {rightR16.map((m) => renderMatch(m, "sm"))}
           </div>
 
           {/* Spacer — flex 2 (ratio 80) */}
-          <div className="flex-[2] min-w-4" />
+          <div className="flex-[2] min-w-[clamp(16px,3vw,48px)]" />
 
           {/* Right R32 */}
-          <div className="flex flex-col justify-around shrink-0 gap-[clamp(6px,1.2vh,16px)] py-[clamp(4px,0.8vh,12px)]">
+          <div className="flex flex-col justify-around shrink-0 gap-[clamp(8px,1.5vh,20px)] py-[clamp(6px,1vh,16px)]">
             {rightR32.map((m) => renderMatch(m, "sm"))}
           </div>
+        </div>
         </div>
       </div>
     </div>

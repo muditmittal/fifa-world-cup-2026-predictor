@@ -64,7 +64,9 @@
 
 .logo-dark { display: none; }
 .dark .logo-light { display: none; }
-.dark .logo-dark { display: block; }
+@media (min-width: 768px) {
+  .dark .logo-dark { display: block; }
+}
 
 .match-card {
   transition: all 0.2s ease;
@@ -185,5 +187,24 @@
 }
 
 .bracket-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
+
+/* Global scrollbar styling for dark mode */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
   background: var(--color-text-muted);
 }

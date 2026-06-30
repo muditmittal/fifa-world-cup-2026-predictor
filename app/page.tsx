@@ -285,20 +285,33 @@ export default function Home() {
     <>
     {!user && <AuthModal onAuth={handleAuth} defaultMode={didLogout ? "login" : "signup"} />}
     <div className="h-screen flex flex-col overflow-hidden">
-      {/* Header — single row: toggle | logo | progress */}
+      {/* Header */}
       <header className="bg-[var(--color-bg)] shrink-0">
-        <div className="max-w-[1600px] mx-auto px-4 py-4 flex items-center justify-between">
-          {/* Left: score pill */}
-          <button className="flex items-center gap-2" onClick={() => !viewingBracket && setShowScoreModal(true)}>
+        <div className="max-w-[1600px] mx-auto px-4 py-2 md:py-4 flex items-center justify-between">
+          {/* Left: score pill — on mobile opens bracket, on desktop opens modal */}
+          <button className="flex items-center gap-2" onClick={() => {
+            if (viewingBracket) return;
+            if (isMobile) { setShowMobileList(true); } else { setShowScoreModal(true); }
+          }}>
             <ProgressBar
               state={viewingBracket && viewingState ? viewingState : state}
               username={viewingBracket ? viewingBracket.username : user?.username}
             />
           </button>
 
-          {/* Center: logo (hidden on mobile) */}
-          <img src="/App Logo Black.png" alt="World Cup Predictor" className="h-16 logo-light hidden sm:block" />
-          <img src="/App Logo White.png" alt="World Cup Predictor" className="h-16 logo-dark hidden sm:block" />
+          {/* Center: logo on desktop, close button on mobile when in bracket */}
+          <img src="/App Logo Black.png" alt="World Cup Predictor" className="h-16 logo-light hidden md:block" />
+          <img src="/App Logo White.png" alt="World Cup Predictor" className="h-16 logo-dark hidden md:block" />
+          {isMobile && showMobileList && (
+            <button
+              onClick={() => setShowMobileList(false)}
+              className="p-1.5 rounded hover:bg-[var(--color-surface-hover)] transition-colors md:hidden"
+            >
+              <svg className="w-5 h-5 text-[var(--color-text-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          )}
 
           {/* Right: share/leaderboard + toggle */}
           <div className="flex items-center gap-3">
@@ -312,12 +325,12 @@ export default function Home() {
           ) : (
             <button
               onClick={handleShare}
-              className="px-2.5 py-1 text-xs font-medium bg-[var(--color-accent)] text-white rounded hover:opacity-90 transition-opacity"
+              className="px-2.5 py-1 text-xs font-bold border border-[var(--color-correct)] text-[var(--color-correct)] rounded hover:bg-[var(--color-correct)]/10 transition-colors"
             >
               Share
             </button>
           )}
-          <div className="hidden sm:flex items-center gap-1 bg-[var(--color-surface)] rounded-lg p-0.5">
+          <div className="hidden md:flex items-center gap-1 bg-[var(--color-surface)] rounded-lg p-0.5">
             <button
               onClick={() => setView("group")}
               className={`px-3 py-1.5 text-xs rounded-md transition-colors ${
@@ -344,7 +357,7 @@ export default function Home() {
       </header>
 
       {/* Main content */}
-      <main className="flex-1 max-w-[1600px] mx-auto w-full px-4 overflow-hidden flex flex-col">
+      <main className="flex-1 max-w-[1600px] mx-auto w-full px-2 md:px-4 overflow-hidden flex flex-col">
         {/* Viewing banner */}
         {viewingBracket && (
           <div className="flex items-center justify-between px-4 py-2 mb-1 bg-[var(--color-surface)] rounded-lg border border-[var(--color-border)] shrink-0">
@@ -362,7 +375,7 @@ export default function Home() {
 
         {/* Mobile: show list view by default */}
         {isMobile && !showMobileList ? (
-          <div className="flex-1 overflow-y-auto">
+          <div className="flex-1 overflow-y-auto max-w-[480px] mx-auto w-full">
             <ScoreModal
               summary={calculateScore(viewingBracket && viewingState ? viewingState : state)}
               state={viewingBracket && viewingState ? viewingState : state}
@@ -375,6 +388,19 @@ export default function Home() {
               onLogout={handleLogout}
               embedded
             />
+            {/* Mobile footer — scrolls with content */}
+            <div className="flex items-center justify-between px-4 py-4 mt-2 border-t border-[var(--color-border-light)]">
+              <ThemeToggle showLabel />
+              <button
+                onClick={handleReset}
+                className="text-xs text-[var(--color-text-muted)] hover:text-[var(--color-incorrect)] transition-colors flex items-center gap-1.5"
+              >
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                Reset
+              </button>
+            </div>
           </div>
         ) : view === "knockout" ? (
           <div className="flex-1 overflow-auto">
@@ -388,21 +414,10 @@ export default function Home() {
           <GroupStageView />
         )}
 
-        {/* Mobile: toggle to bracket view */}
-        {isMobile && (
-          <div className="shrink-0 py-2 flex justify-center">
-            <button
-              onClick={() => setShowMobileList(!showMobileList)}
-              className="px-3 py-1.5 text-xs font-medium border border-[var(--color-border)] rounded-lg hover:bg-[var(--color-surface-hover)] transition-colors"
-            >
-              {showMobileList ? "← Back to List" : "Open Bracket →"}
-            </button>
-          </div>
-        )}
       </main>
 
-      {/* Footer */}
-      <footer className="shrink-0 py-2 px-4">
+      {/* Footer — hidden on mobile */}
+      <footer className="shrink-0 py-2 px-4 hidden md:block">
         <div className="max-w-[1600px] mx-auto flex items-center justify-between">
           <ThemeToggle showLabel />
           <div className="flex items-center gap-3">
