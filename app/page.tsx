@@ -198,11 +198,7 @@ export default function Home() {
     []
   );
 
-  const handleSync = useCallback(async () => {
-    // First, trigger the cron to fetch latest results from the sports API into DB
-    await fetch(`/api/cron?adminPin=${encodeURIComponent(process.env.NEXT_PUBLIC_ADMIN_PIN || "2026")}`).catch(() => {});
-
-    // Then load results from DB and apply to state
+  const loadResults = useCallback(async () => {
     try {
       const res = await fetch("/api/results");
       const data = await res.json();
@@ -220,10 +216,19 @@ export default function Home() {
     } catch {}
   }, []);
 
-  // Auto-sync results on page load
+  const handleSync = useCallback(async () => {
+    // Trigger live fetch from sports API → updates DB for everyone
+    await fetch("/api/cron?adminPin=2026").catch(() => {});
+    // Then load fresh results from DB
+    await loadResults();
+  }, [loadResults]);
+
+  // Auto-sync results on page load: read DB, then background-refresh from API
   useEffect(() => {
     if (!state || !authChecked) return;
-    handleSync();
+    loadResults();
+    // Also trigger a background live fetch (non-blocking) so DB stays fresh
+    fetch("/api/cron?adminPin=2026").catch(() => {});
   }, [authChecked]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleReset = useCallback(() => {
