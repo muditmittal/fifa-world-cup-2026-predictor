@@ -231,20 +231,20 @@ export const bracket: MatchFixture[] = [
   { id: 86, round: "R32", date: "Jul 3", venue: "Miami", teamACode: "ARG", teamBCode: "CPV", nextMatchId: 95, nextSlot: "A", bracketSide: "right" },
   { id: 88, round: "R32", date: "Jul 3", venue: "Dallas", teamACode: "AUS", teamBCode: "EGY", nextMatchId: 95, nextSlot: "B", bracketSide: "right" },
 
-  // Round of 16
-  { id: 89, round: "R16", date: "Jul 4", venue: "Philadelphia", teamACode: null, teamBCode: null, nextMatchId: 97, nextSlot: "A", bracketSide: "left" },
+  // Round of 16 — ordered to align with R32 display (connectors flow straight)
   { id: 90, round: "R16", date: "Jul 4", venue: "Houston", teamACode: null, teamBCode: null, nextMatchId: 97, nextSlot: "B", bracketSide: "left" },
+  { id: 89, round: "R16", date: "Jul 4", venue: "Philadelphia", teamACode: null, teamBCode: null, nextMatchId: 97, nextSlot: "A", bracketSide: "left" },
   { id: 91, round: "R16", date: "Jul 5", venue: "New York", teamACode: null, teamBCode: null, nextMatchId: 99, nextSlot: "A", bracketSide: "left" },
   { id: 92, round: "R16", date: "Jul 5", venue: "Mexico City", teamACode: null, teamBCode: null, nextMatchId: 99, nextSlot: "B", bracketSide: "left" },
-  { id: 93, round: "R16", date: "Jul 6", venue: "Dallas", teamACode: null, teamBCode: null, nextMatchId: 98, nextSlot: "A", bracketSide: "right" },
   { id: 94, round: "R16", date: "Jul 6", venue: "Seattle", teamACode: null, teamBCode: null, nextMatchId: 98, nextSlot: "B", bracketSide: "right" },
-  { id: 95, round: "R16", date: "Jul 7", venue: "Atlanta", teamACode: null, teamBCode: null, nextMatchId: 100, nextSlot: "A", bracketSide: "right" },
+  { id: 93, round: "R16", date: "Jul 6", venue: "Dallas", teamACode: null, teamBCode: null, nextMatchId: 98, nextSlot: "A", bracketSide: "right" },
   { id: 96, round: "R16", date: "Jul 7", venue: "Vancouver", teamACode: null, teamBCode: null, nextMatchId: 100, nextSlot: "B", bracketSide: "right" },
+  { id: 95, round: "R16", date: "Jul 7", venue: "Atlanta", teamACode: null, teamBCode: null, nextMatchId: 100, nextSlot: "A", bracketSide: "right" },
 
-  // Quarter-finals
+  // Quarter-finals — ordered to align with R16 display
   { id: 97, round: "QF", date: "Jul 9", venue: "Boston", teamACode: null, teamBCode: null, nextMatchId: 101, nextSlot: "A", bracketSide: "left" },
-  { id: 98, round: "QF", date: "Jul 10", venue: "Los Angeles", teamACode: null, teamBCode: null, nextMatchId: 101, nextSlot: "B", bracketSide: "right" },
   { id: 99, round: "QF", date: "Jul 11", venue: "Miami", teamACode: null, teamBCode: null, nextMatchId: 102, nextSlot: "A", bracketSide: "left" },
+  { id: 98, round: "QF", date: "Jul 10", venue: "Los Angeles", teamACode: null, teamBCode: null, nextMatchId: 101, nextSlot: "B", bracketSide: "right" },
   { id: 100, round: "QF", date: "Jul 11", venue: "Kansas City", teamACode: null, teamBCode: null, nextMatchId: 102, nextSlot: "B", bracketSide: "right" },
 
   // Semi-finals
