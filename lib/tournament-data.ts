@@ -211,25 +211,25 @@ export interface MatchFixture {
 }
 
 export const bracket: MatchFixture[] = [
-  // Round of 32 — Left side (ordered by R16 pairing adjacency)
-  { id: 74, round: "R32", date: "Jun 29", venue: "Boston", teamACode: "GER", teamBCode: "PAR", nextMatchId: 89, nextSlot: "A", bracketSide: "left" },
-  { id: 77, round: "R32", date: "Jun 30", venue: "New York", teamACode: "FRA", teamBCode: "SWE", nextMatchId: 89, nextSlot: "B", bracketSide: "left" },
+  // Round of 32 — Left side (pairs adjacent, sorted by earliest date in pair)
   { id: 73, round: "R32", date: "Jun 28", venue: "Los Angeles", teamACode: "RSA", teamBCode: "CAN", nextMatchId: 90, nextSlot: "A", bracketSide: "left" },
   { id: 75, round: "R32", date: "Jun 29", venue: "Monterrey", teamACode: "NED", teamBCode: "MAR", nextMatchId: 90, nextSlot: "B", bracketSide: "left" },
+  { id: 74, round: "R32", date: "Jun 29", venue: "Boston", teamACode: "GER", teamBCode: "PAR", nextMatchId: 89, nextSlot: "A", bracketSide: "left" },
+  { id: 77, round: "R32", date: "Jun 30", venue: "New York", teamACode: "FRA", teamBCode: "SWE", nextMatchId: 89, nextSlot: "B", bracketSide: "left" },
   { id: 76, round: "R32", date: "Jun 29", venue: "Houston", teamACode: "BRA", teamBCode: "JPN", nextMatchId: 91, nextSlot: "A", bracketSide: "left" },
   { id: 78, round: "R32", date: "Jun 30", venue: "Dallas", teamACode: "CIV", teamBCode: "NOR", nextMatchId: 91, nextSlot: "B", bracketSide: "left" },
   { id: 79, round: "R32", date: "Jun 30", venue: "Mexico City", teamACode: "MEX", teamBCode: "ECU", nextMatchId: 92, nextSlot: "A", bracketSide: "left" },
   { id: 80, round: "R32", date: "Jul 1", venue: "Atlanta", teamACode: "ENG", teamBCode: "COD", nextMatchId: 92, nextSlot: "B", bracketSide: "left" },
 
-  // Round of 32 — Right side (ordered by R16 pairing adjacency)
-  { id: 83, round: "R32", date: "Jul 2", venue: "Toronto", teamACode: "POR", teamBCode: "CRO", nextMatchId: 93, nextSlot: "A", bracketSide: "right" },
-  { id: 84, round: "R32", date: "Jul 2", venue: "Los Angeles", teamACode: "ESP", teamBCode: "AUT", nextMatchId: 93, nextSlot: "B", bracketSide: "right" },
+  // Round of 32 — Right side (pairs adjacent, sorted by earliest date in pair)
   { id: 81, round: "R32", date: "Jul 1", venue: "San Francisco", teamACode: "USA", teamBCode: "BIH", nextMatchId: 94, nextSlot: "A", bracketSide: "right" },
   { id: 82, round: "R32", date: "Jul 1", venue: "Seattle", teamACode: "BEL", teamBCode: "SEN", nextMatchId: 94, nextSlot: "B", bracketSide: "right" },
-  { id: 86, round: "R32", date: "Jul 3", venue: "Miami", teamACode: "ARG", teamBCode: "CPV", nextMatchId: 95, nextSlot: "A", bracketSide: "right" },
-  { id: 88, round: "R32", date: "Jul 3", venue: "Dallas", teamACode: "AUS", teamBCode: "EGY", nextMatchId: 95, nextSlot: "B", bracketSide: "right" },
+  { id: 83, round: "R32", date: "Jul 2", venue: "Toronto", teamACode: "POR", teamBCode: "CRO", nextMatchId: 93, nextSlot: "A", bracketSide: "right" },
+  { id: 84, round: "R32", date: "Jul 2", venue: "Los Angeles", teamACode: "ESP", teamBCode: "AUT", nextMatchId: 93, nextSlot: "B", bracketSide: "right" },
   { id: 85, round: "R32", date: "Jul 2", venue: "Vancouver", teamACode: "SUI", teamBCode: "ALG", nextMatchId: 96, nextSlot: "A", bracketSide: "right" },
   { id: 87, round: "R32", date: "Jul 3", venue: "Kansas City", teamACode: "COL", teamBCode: "GHA", nextMatchId: 96, nextSlot: "B", bracketSide: "right" },
+  { id: 86, round: "R32", date: "Jul 3", venue: "Miami", teamACode: "ARG", teamBCode: "CPV", nextMatchId: 95, nextSlot: "A", bracketSide: "right" },
+  { id: 88, round: "R32", date: "Jul 3", venue: "Dallas", teamACode: "AUS", teamBCode: "EGY", nextMatchId: 95, nextSlot: "B", bracketSide: "right" },
 
   // Round of 16
   { id: 89, round: "R16", date: "Jul 4", venue: "Philadelphia", teamACode: null, teamBCode: null, nextMatchId: 97, nextSlot: "A", bracketSide: "left" },
