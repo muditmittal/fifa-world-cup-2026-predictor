@@ -214,7 +214,7 @@ export function BracketView({ state, onPick, onCardClick, onScoreChange }: Brack
               <div className="absolute -inset-3 rounded-lg border-2 border-[var(--color-gold-border)] opacity-60" />
               <div className="relative flex flex-col items-center gap-4 px-3 py-3">
                 <div className="flex-none">
-                  <div className="flex items-center justify-center gap-2">
+                  <div className="flex items-center justify-center gap-2 mb-6">
                   <img src="/FIFA World Cup Trophy.png" alt="Trophy" className="h-8" />
                   {(() => {
                     const finalState = state.matches[104];

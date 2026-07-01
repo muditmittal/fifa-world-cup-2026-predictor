@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getDb } from "@/lib/db";
+import { applyActualResults, type BracketState } from "@/lib/bracket-logic";
 
 const FOOTBALL_DATA_API = "https://api.football-data.org/v4/competitions/WC/matches";
 const API_TOKEN = process.env.FOOTBALL_DATA_API_KEY || "";
@@ -105,6 +106,11 @@ export async function GET(req: NextRequest) {
       updated++;
     }
 
+    // After updating results, apply to all users' brackets
+    if (updated > 0) {
+      await applyResultsToAllUsers(sql);
+    }
+
     return NextResponse.json({ success: true, updated, total: matches.length });
   } catch (e: any) {
     return NextResponse.json({ error: e.message }, { status: 500 });
@@ -143,4 +149,27 @@ function findMatchIdByTeams(homeTeam: string, awayTeam: string): number | null {
   // For later rounds where teams aren't in the static data, check DB for existing results
   // that would tell us who advanced. This handles dynamic bracket progression.
   return null;
+}
+
+async function applyResultsToAllUsers(sql: ReturnType<typeof getDb>) {
+  const resultsRows = await sql`SELECT match_id, winner, score FROM actual_results ORDER BY match_id`;
+  if (resultsRows.length === 0) return;
+
+  const results = resultsRows.map((r) => ({
+    matchId: r.match_id as number,
+    winner: r.winner as string,
+    score: r.score as string,
+  }));
+
+  const users = await sql`SELECT user_id, bracket_state FROM predictions WHERE bracket_state IS NOT NULL`;
+
+  for (const user of users) {
+    const state = user.bracket_state as BracketState;
+    if (!state?.matches) continue;
+
+    const newState = applyActualResults(state, results);
+    if (JSON.stringify(newState) !== JSON.stringify(state)) {
+      await sql`UPDATE predictions SET bracket_state = ${JSON.stringify(newState)}::jsonb, updated_at = NOW() WHERE user_id = ${user.user_id}`;
+    }
+  }
 }

@@ -92,8 +92,9 @@ export function MatchNode({
   const getTeamStatus = (teamCode: string | null): string => {
     if (!teamCode) return "";
     if (isPlayed && actualWinner) {
-      if (predictedWinner === teamCode && actualWinner === teamCode) return "correct";
-      if (predictedWinner === teamCode && actualWinner !== teamCode) return "incorrect";
+      // Show the actual winner with "selected" gradient styling
+      if (actualWinner === teamCode) return "selected";
+      return "";
     }
     if (status === "reevaluate" && predictedWinner === teamCode) return "reevaluate";
     if (predictedWinner === teamCode) return "selected";
@@ -142,7 +143,11 @@ export function MatchNode({
     >
       {/* Header: clickable to open sidebar */}
       <div
-        className="group/header flex items-center h-[28px] px-2 border-b border-[var(--color-border)] bg-[var(--color-bg)] cursor-pointer hover:bg-[var(--color-surface-hover)] transition-colors"
+        className={`group/header flex items-center h-[28px] px-2 border-b border-[var(--color-border)] cursor-pointer hover:bg-[var(--color-surface-hover)] transition-colors ${
+          isPlayed && status === "correct" ? "bg-[var(--color-correct)]/10" :
+          isPlayed && status === "incorrect" ? "bg-[var(--color-incorrect)]/10" :
+          "bg-[var(--color-bg)]"
+        }`}
         onClick={(e) => {
           e.stopPropagation();
           const rect = e.currentTarget.closest("[data-match-id]")?.getBoundingClientRect();
@@ -158,8 +163,18 @@ export function MatchNode({
           }
         }}
       >
-        <span className={`${s.header} text-[var(--color-text-muted)] flex-1`}>
-          {headerLabel || `${roundLabel(round)} · M${matchId}`}
+        <span className={`${s.header} flex-1 font-bold ${
+          isPlayed && status === "correct" ? "text-[var(--color-correct)]" :
+          isPlayed && status === "incorrect" ? "text-[var(--color-incorrect)]" :
+          "text-[var(--color-text-muted)]"
+        }`}>
+          {isPlayed ? (() => {
+            const winnerCorrect = predictedWinner === actualWinner;
+            const scoreCorrect = winnerCorrect && predictedScore && actualScore &&
+              predictedScore.match(/^(\d+)\s*[-–]\s*(\d+)/)?.[0] === actualScore.match(/^(\d+)\s*[-–]\s*(\d+)/)?.[0];
+            const pts = (winnerCorrect ? 10 : 0) + (scoreCorrect ? 10 : 0);
+            return <><svg className="w-3 h-3 inline-block mr-0.5 -mt-px" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d={winnerCorrect ? "M5 13l4 4L19 7" : "M6 18L18 6M6 6l12 12"} /></svg>+{pts} pts</>;
+          })() : (headerLabel || `${roundLabel(round)} · M${matchId}`)}
         </span>
         {/* Info icon: outlined on card hover, filled on header hover */}
         <span className="relative w-4 h-4 shrink-0">
@@ -310,9 +325,6 @@ function TeamRow({
         ) : isPredicted ? (
           <img src="/trionda-cursor.png" alt="" className="inline-block w-3 h-3" />
         ) : null}
-        {status === "correct" && <span className="text-[var(--color-correct)] text-[10px]">✓</span>}
-        {status === "incorrect" && <span className="text-[var(--color-incorrect)] text-[10px]">✗</span>}
-        {status === "reevaluate" && <span className="text-[var(--color-reevaluate)] text-[10px]">!</span>}
       </button>
 
       {show && bracketState && typeof document !== "undefined" &&

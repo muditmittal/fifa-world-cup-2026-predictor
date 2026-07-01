@@ -256,10 +256,8 @@ function MatchRow({ fixtureId, state, summary, onPickWinner, onScorePredict, emb
         </div>
         <div className="flex items-center min-w-0 gap-4 md:flex-1">
           <TeamPill code={teamA} isSelected={ms?.actualWinner === teamA} isMuted={ms?.actualWinner !== teamA} isPlayed={true} />
-          <div className="w-24 h-11 md:w-14 md:h-7 flex items-center justify-center shrink-0">
-            <span className="text-xs font-bold font-[family-name:var(--font-geist-mono)]">
-              {ms?.actualScore || "–"}
-            </span>
+          <div className="w-24 h-11 md:w-14 md:h-7 flex flex-col items-center justify-center shrink-0">
+            <ScoreDisplay score={ms?.actualScore || "–"} />
           </div>
           <TeamPill code={teamB} isSelected={ms?.actualWinner === teamB} isMuted={ms?.actualWinner !== teamB} isPlayed={true} />
         </div>
@@ -744,4 +742,17 @@ function getQuickScores(winnerIsA: boolean): string[] {
   return winnerIsA
     ? ["1-0", "2-0", "2-1", "3-1"]
     : ["0-1", "0-2", "1-2", "1-3"];
+}
+
+function ScoreDisplay({ score }: { score: string }) {
+  const penMatch = score.match(/^(\d+\s*[-–]\s*\d+)\s*\((.+?)\)$/);
+  if (penMatch) {
+    return (
+      <>
+        <span className="text-xs font-bold font-[family-name:var(--font-geist-mono)]">{penMatch[1]}</span>
+        <span className="text-[9px] text-[var(--color-text-muted)] font-[family-name:var(--font-geist-mono)]">{penMatch[2]}</span>
+      </>
+    );
+  }
+  return <span className="text-xs font-bold font-[family-name:var(--font-geist-mono)]">{score}</span>;
 }
