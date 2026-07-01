@@ -373,6 +373,21 @@ export default function Home() {
 
       {/* Main content */}
       <main className="flex-1 max-w-[1600px] mx-auto w-full px-2 md:px-4 overflow-hidden flex flex-col">
+        {/* Bracket correction banner */}
+        {!localStorage.getItem("wc_banner_dismissed") && (
+          <div className="flex items-center justify-between px-4 py-2 mb-1 bg-[var(--color-reevaluate-bg)] border border-[var(--color-reevaluate)] rounded-lg shrink-0">
+            <span className="text-xs text-[var(--color-text)]">
+              <strong>Bracket corrected:</strong> R16+ pairings have been fixed to match the official FIFA bracket. Your R32 picks are preserved — please redo R16 onwards.
+            </span>
+            <button
+              onClick={(e) => { localStorage.setItem("wc_banner_dismissed", "1"); (e.target as HTMLElement).closest("[class*=bg-]")?.remove(); }}
+              className="ml-3 text-xs text-[var(--color-text-muted)] hover:text-[var(--color-text)] shrink-0"
+            >
+              ✕
+            </button>
+          </div>
+        )}
+
         {/* Viewing banner */}
         {viewingBracket && (
           <div className="flex items-center justify-between px-4 py-2 mb-1 bg-[var(--color-surface)] rounded-lg border border-[var(--color-border)] shrink-0">
