@@ -199,6 +199,10 @@ export default function Home() {
   );
 
   const handleSync = useCallback(async () => {
+    // First, trigger the cron to fetch latest results from the sports API into DB
+    await fetch(`/api/cron?adminPin=${encodeURIComponent(process.env.NEXT_PUBLIC_ADMIN_PIN || "2026")}`).catch(() => {});
+
+    // Then load results from DB and apply to state
     try {
       const res = await fetch("/api/results");
       const data = await res.json();
@@ -213,13 +217,7 @@ export default function Home() {
           return applyActualResults(prev, results);
         });
       }
-    } catch {
-      setState((prev) => {
-        if (!prev) return prev;
-        if (actualResults.length === 0) return prev;
-        return applyActualResults(prev, actualResults);
-      });
-    }
+    } catch {}
   }, []);
 
   // Auto-sync results on page load
@@ -436,6 +434,7 @@ export default function Home() {
             <span className="text-xs text-[var(--color-text-muted)]">
               Sources: FIFA.com · Sporting News · Wikipedia
             </span>
+            <SyncButton onSync={handleSync} lastSynced={state.lastSynced} />
           </div>
           <button
             onClick={handleReset}
